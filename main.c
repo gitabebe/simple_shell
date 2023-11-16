@@ -9,20 +9,15 @@
  */
 int main(int argc, char *argv[])
 {
-	int ret = 0, retn;
-	int *exe_ret = &retn;
+	int ret = 0, retn, *exe_ret = &retn;
 	char *prompt = "$ ", *new_line = "\n";
 
-	name = argv[0];
-	hist = 1;
-	aliases = NULL;
+	name = argv[0],	hist = 1, aliases = NULL;
 	signal(SIGINT, sig_handler);
-
 	*exe_ret = 0;
 	environ = _copyenv();
 	if (!environ)
 		exit(-100);
-
 	if (argc != 1)
 	{
 		ret = proc_file_commands(argv[1], exe_ret);
@@ -30,7 +25,6 @@ int main(int argc, char *argv[])
 		free_alias_list(aliases);
 		return (*exe_ret);
 	}
-
 	if (!isatty(STDIN_FILENO))
 	{
 		while (ret != END_OF_FILE && ret != EXIT)
@@ -39,7 +33,6 @@ int main(int argc, char *argv[])
 		free_alias_list(aliases);
 		return (*exe_ret);
 	}
-
 	while (1)
 	{
 		write(STDOUT_FILENO, prompt, 2);
@@ -53,7 +46,6 @@ int main(int argc, char *argv[])
 			exit(*exe_ret);
 		}
 	}
-
 	free_env();
 	free_alias_list(aliases);
 	return (*exe_ret);

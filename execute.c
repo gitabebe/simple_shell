@@ -15,11 +15,7 @@ int execute(char **args, char **front)
 	char *command = args[0];
 
 	if (command[0] != '/' && command[0] != '.')
-	{
-		flag = 1;
-		command = get_location(command);
-	}
-
+		flag = 1, command = get_location(command);
 	if (!command || (access(command, F_OK) == -1))
 	{
 		if (errno == EACCES)
@@ -42,15 +38,13 @@ int execute(char **args, char **front)
 			execve(command, args, environ);
 			if (errno == EACCES)
 				ret = (create_error(args, 126));
-			free_env();
-			free_args(args, front);
+			free_env(), free_args(args, front);
 			free_alias_list(aliases);
 			_exit(ret);
 		}
 		else
 		{
-			wait(&status);
-			ret = WEXITSTATUS(status);
+			wait(&status), ret = WEXITSTATUS(status);
 		}
 	}
 	if (flag)
